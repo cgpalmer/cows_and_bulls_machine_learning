@@ -1,13 +1,14 @@
 import random
-import django.contrib.redirects
+
 # Create your views here.
 # https://www.geeksforgeeks.org/python-check-if-list-contains-all-unique-elements/
 
 # Global data storage
 
 guesses = {}
-
-
+numbers_available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+numbers_not_available = []
+numbers_definite = []
 
 
 def prompt_player_number():
@@ -18,7 +19,7 @@ def prompt_player_number():
         number_to_guess_digits.append(i)
     flag = len(set(number_to_guess_digits)) == len(number_to_guess_digits)
     while flag is False:
-        print("Duplicates. Enter new number: ")
+
         number_to_guess = input()
         number_to_guess_digits = []
         for i in number_to_guess:
@@ -29,32 +30,30 @@ def prompt_player_number():
     print("Your number is valid: " + str(number_to_guess))
 
 
-
-
-
-
-def computer_first_guess():
-    # choosing first digit
-    first_guess = []
-    digit = random.randint(1,9)
-    first_guess.append(str(digit))
-    for digit in range(3):
-        digit = random.randint(0,9)
-        digit = str(digit)
-        while digit in first_guess:
-            digit = random.randint(0,9)
+def analysed_guess(numbers_available, numbers_definite):
+    guess = []
+    if numbers_definite:
+        for digit in range(4):
+            digit = random.choice(numbers_definite)
             digit = str(digit)
-            if digit not in first_guess:
-                break
-        first_guess.append(str(digit))
-    return first_guess
-
-
-def display_computer_first_guess():
-    first_guess = computer_first_guess()
-    printed_first_guess = int(first_guess[0]+first_guess[1]+first_guess[2]+first_guess[3])
-    print(printed_first_guess)
-    return printed_first_guess
+            while digit in guess:
+                digit = random.choice(numbers_definite)
+                digit = str(digit)
+                if digit not in guess:
+                    break
+            guess.append(str(digit))
+        return guess
+    else:
+        for digit in range(4):
+            digit = random.choice(numbers_available)
+            digit = str(digit)
+            while digit in guess:
+                digit = random.choice(numbers_available)
+                digit = str(digit)
+                if digit not in guess:
+                    break
+            guess.append(str(digit))
+        return guess
 
 
 def prompt_player_cows_and_bulls_info():
@@ -65,23 +64,53 @@ def prompt_player_cows_and_bulls_info():
     return (number_of_cows, number_of_bulls)
 
 
-def display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_first_guess):
-    print(f"There are {number_of_cows} cows and {number_of_bulls} bulls in {printed_first_guess}")
-
-
-def guess_analysis(first_guess, number_of_cows, number_of_bulls):
+def guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available):
+    print("gues analysis")
+    print(numbers_available)
+    number_of_cows = int(number_of_cows)
+    number_of_bulls = int(number_of_bulls)
+    score = (number_of_cows * 1) + (number_of_bulls * 10)
+    print("this is the score " + str(score))
+    print(type(score))
+    if score == 40 or score == 31 or score == 22 or score == 13 or score == 4:
+        for i in range(4):
+            numbers_available = []
+            numbers_definite.append(int(guess[i]))
+            numbers_available.append(int(guess[i]))
+    elif score == 0:
+        numbers_available = []
+        numbers_not_available = []
+        for i in range(4):
+            numbers_not_available.append(int(guess[i]))
+        for j in range(0, 10):
+            if j not in numbers_not_available:
+                numbers_available.append(j)
+    else:
+        numbers_available = []
+        for i in range(0, 10):
+            if i not in numbers_not_available:
+                numbers_available.append(i)
     guesses.update({'guess_1': {
-                        'first_no': first_guess[0],
-                        'second_no': first_guess[1],
-                        'third_no': first_guess[2],
-                        'fourth_no': first_guess[3],
+                        'first_no': guess[0],
+                        'second_no': guess[1],
+                        'third_no': guess[2],
+                        'fourth_no': guess[3],
                         'cows': number_of_cows,
-                        'bulls': number_of_bulls
+                        'bulls': number_of_bulls,
+                        'score': score
                    }})
-    print(guesses)
+    return (numbers_available, numbers_not_available)
 
 
 
+def display_computer_guess(guess):
+    printed_guess = int(guess[0]+guess[1]+guess[2]+guess[3])
+    print(printed_guess)
+    return printed_guess
+
+
+def display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_guess):
+    print(f"There are {number_of_cows} cows and {number_of_bulls} bulls in {printed_guess}")
 
 
 def assess_if_answer_is_correct(number_of_bulls):
@@ -91,41 +120,36 @@ def assess_if_answer_is_correct(number_of_bulls):
     else:
         finished = False
         return finished
-
-
-
-
-
-
-
-
-
-
-
-
 # ----------------------------------------------------------------------------------------------------
 
 # Script
+
+
 prompt_player_number()
 print("Computer's first guess")
-first_guess = computer_first_guess()
-printed_first_guess = display_computer_first_guess()
+# Turn this into a function and save repeating it all.
+guess = analysed_guess(numbers_available, numbers_definite)
+printed_guess = display_computer_guess(guess)
 number_of_cows, number_of_bulls = prompt_player_cows_and_bulls_info()
-display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_first_guess)
+display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_guess)
+# guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available)
+numbers_available, numbers_not_available = guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available)
 finished = assess_if_answer_is_correct(number_of_bulls)
-guess_analysis(first_guess, number_of_cows, number_of_bulls)
+
 if finished:
     print("The computer guessed correctly!")
 else:
     while finished is False:
         print("Okay, the computer guesses: ")
-        display_computer_first_guess() # needs changing to subsequent guesses. 
+        print(numbers_available)
+        guess = analysed_guess(numbers_available, numbers_definite)
+        printed_guess = display_computer_guess(guess)
         number_of_cows, number_of_bulls = prompt_player_cows_and_bulls_info()
-        display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_first_guess)
-        # print("no. of bulls" + number_of_bulls)
+        display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_guess)
+        # guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available)
+        numbers_available, numbers_not_available = guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available)
         finished = assess_if_answer_is_correct(number_of_bulls)
         if finished:
             break
 
 print("The computer guessed correctly!")
-
