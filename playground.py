@@ -74,9 +74,13 @@ def analysed_guess(numbers_available, numbers_definite):
                     if digit not in guess:
                         break
                 guess.append(str(digit))
-
+        printed_guess = display_computer_guess(guess)
         for key in guesses.keys():
-            print(key, '->', guesses[key])
+            print(key, '->', guesses[key]['printed_guess'])
+            if guesses[key]['printed_guess'] == printed_guess:
+                print("this has already been used")
+            else:
+                print("this has not been used")
         return guess
 
 
