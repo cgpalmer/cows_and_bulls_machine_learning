@@ -10,6 +10,7 @@ numbers_available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 numbers_not_available = []
 numbers_definite = []
 used_digits = []
+x = 1
 
 def prompt_player_number():
     print("Put in the number for the computer to guess: ")
@@ -73,6 +74,9 @@ def analysed_guess(numbers_available, numbers_definite):
                     if digit not in guess:
                         break
                 guess.append(str(digit))
+
+        for key in guesses.keys():
+            print(key, '->', guesses[key])
         return guess
 
 
@@ -108,7 +112,7 @@ def guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, nu
                 numbers_available.append(i)
 
     printed_guess = display_computer_guess(guess)
-    guesses.update({'guess_1': {
+    guesses.update({f'guess_{x}': {
                         'first_no': guess[0],
                         'second_no': guess[1],
                         'third_no': guess[2],
@@ -154,6 +158,7 @@ number_of_cows, number_of_bulls = prompt_player_cows_and_bulls_info()
 display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_guess)
 # guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available)
 numbers_available, numbers_not_available = guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available)
+x = x + 1
 finished = assess_if_answer_is_correct(number_of_bulls)
 
 if finished:
@@ -168,6 +173,7 @@ else:
         display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_guess)
         # guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available)
         numbers_available, numbers_not_available = guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available)
+        x = x + 1
         finished = assess_if_answer_is_correct(number_of_bulls)
         if finished:
             break
