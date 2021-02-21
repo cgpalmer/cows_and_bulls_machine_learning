@@ -9,7 +9,7 @@ guesses = {}
 numbers_available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 numbers_not_available = []
 numbers_definite = []
-
+used_digits = []
 
 def prompt_player_number():
     print("Put in the number for the computer to guess: ")
@@ -19,7 +19,6 @@ def prompt_player_number():
         number_to_guess_digits.append(i)
     flag = len(set(number_to_guess_digits)) == len(number_to_guess_digits)
     while flag is False:
-
         number_to_guess = input()
         number_to_guess_digits = []
         for i in number_to_guess:
@@ -28,6 +27,7 @@ def prompt_player_number():
         if flag:
             break
     print("Your number is valid: " + str(number_to_guess))
+
 
 
 def analysed_guess(numbers_available, numbers_definite):
@@ -44,15 +44,35 @@ def analysed_guess(numbers_available, numbers_definite):
             guess.append(str(digit))
         return guess
     else:
-        for digit in range(4):
-            digit = random.choice(numbers_available)
-            digit = str(digit)
-            while digit in guess:
+        if len(used_digits) < 10:
+            while len(used_digits) < 10:
                 digit = random.choice(numbers_available)
                 digit = str(digit)
-                if digit not in guess:
+                if digit not in used_digits:
+                    used_digits.append(digit)
+                    guess.append(str(digit))
+                if len(guess) > 3 or len(used_digits) == 10:
                     break
-            guess.append(str(digit))
+            if len(guess) < 4:
+                num_need_to_fill_guess = 4 - len(guess)
+                for i in range(num_need_to_fill_guess):
+                    digit = random.choice(numbers_available)
+                    while digit in guess:
+                        digit = random.choice(numbers_available)
+                        digit = str(digit)
+                        if digit not in guess:
+                            break
+                    guess.append(str(digit))
+        else:
+            for digit in range(4):
+                digit = random.choice(numbers_available)
+                digit = str(digit)
+                while digit in guess:
+                    digit = random.choice(numbers_available)
+                    digit = str(digit)
+                    if digit not in guess:
+                        break
+                guess.append(str(digit))
         return guess
 
 
@@ -65,13 +85,9 @@ def prompt_player_cows_and_bulls_info():
 
 
 def guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available):
-    print("gues analysis")
-    print(numbers_available)
     number_of_cows = int(number_of_cows)
     number_of_bulls = int(number_of_bulls)
     score = (number_of_cows * 1) + (number_of_bulls * 10)
-    print("this is the score " + str(score))
-    print(type(score))
     if score == 40 or score == 31 or score == 22 or score == 13 or score == 4:
         for i in range(4):
             numbers_available = []
@@ -90,6 +106,8 @@ def guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, nu
         for i in range(0, 10):
             if i not in numbers_not_available:
                 numbers_available.append(i)
+
+    printed_guess = display_computer_guess(guess)
     guesses.update({'guess_1': {
                         'first_no': guess[0],
                         'second_no': guess[1],
@@ -97,8 +115,10 @@ def guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, nu
                         'fourth_no': guess[3],
                         'cows': number_of_cows,
                         'bulls': number_of_bulls,
-                        'score': score
+                        'score': score,
+                        'printed_guess': printed_guess
                    }})
+    print(guesses)
     return (numbers_available, numbers_not_available)
 
 
