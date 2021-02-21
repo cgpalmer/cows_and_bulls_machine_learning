@@ -8,38 +8,41 @@ def prompt_player_number():
     number_to_guess_digits = []
     for i in number_to_guess:
         number_to_guess_digits.append(i)
-        print(number_to_guess_digits)
     flag = len(set(number_to_guess_digits)) == len(number_to_guess_digits)
-    print(flag)
     while flag is False:
         print("Duplicates. Enter new number: ")
         number_to_guess = input()
         number_to_guess_digits = []
         for i in number_to_guess:
             number_to_guess_digits.append(i)
-            print(number_to_guess_digits)
         flag = len(set(number_to_guess_digits)) == len(number_to_guess_digits)
         if flag:
             break
-    print("suitable number found")
     print("Your number is valid: " + str(number_to_guess))
 
 
 
 
 
-first_guess = []
+
 def computer_first_guess():
-    for digit in range(4):
+    # choosing first digit
+    first_guess = []
+    digit = random.randint(1,9)
+    first_guess.append(str(digit))
+    for digit in range(3):
         digit = random.randint(0,9)
         first_guess.append(str(digit))
-    printed_first_guess = int(first_guess[0]+first_guess[1]+first_guess[2]+first_guess[3])
-    print(printed_first_guess)
+    
+    return first_guess
 
 
 def display_computer_first_guess():
-    print("computers first guess")
-    computer_first_guess()
+    first_guess = computer_first_guess()
+    printed_first_guess = int(first_guess[0]+first_guess[1]+first_guess[2]+first_guess[3])
+    print(printed_first_guess)
+    return printed_first_guess
+
 
 def prompt_player_cows_and_bulls_info():
     print("enter the number of cows:")
@@ -49,13 +52,39 @@ def prompt_player_cows_and_bulls_info():
     return (number_of_cows, number_of_bulls)
 
 
-def display_cow_and_bull_info(number_of_cows, number_of_bulls,):
-    printed_first_guess = int(first_guess[0]+first_guess[1]+first_guess[2]+first_guess[3])
-    print(printed_first_guess)
+def display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_first_guess):
     print(f"There are {number_of_cows} cows and {number_of_bulls} bulls in {printed_first_guess}")
 
 
+def assess_if_answer_is_correct(number_of_bulls):
+    if number_of_bulls == "4":
+        finished = True
+        return finished
+    else:
+        finished = False
+        return finished
+
+
+
+
 prompt_player_number()
-display_computer_first_guess()
+print("Computer's first guess")
+printed_first_guess = display_computer_first_guess()
 number_of_cows, number_of_bulls = prompt_player_cows_and_bulls_info()
-display_cow_and_bull_info(number_of_cows, number_of_bulls,)
+display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_first_guess)
+finished = assess_if_answer_is_correct(number_of_bulls)
+if finished:
+    print("The computer guessed correctly!")
+else:
+    while finished is False:
+        print("Okay, the computer guesses: ")
+        display_computer_first_guess()
+        number_of_cows, number_of_bulls = prompt_player_cows_and_bulls_info()
+        display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_first_guess)
+        # print("no. of bulls" + number_of_bulls)
+        finished = assess_if_answer_is_correct(number_of_bulls)
+        if finished:
+            break
+
+print("The computer guessed correctly!")
+
