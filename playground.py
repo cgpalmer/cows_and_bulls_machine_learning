@@ -22,7 +22,7 @@ combos = {
     'combo_2': {
         'num_cows': 0,
         'num_bulls': 1,
-        'combo_value': 10
+        'combo_value': 1
     },
     'combo_3': {
         'num_cows': 2,
@@ -32,12 +32,12 @@ combos = {
     'combo_4': {
         'num_cows': 0,
         'num_bulls': 2,
-        'combo_value': 20
+        'combo_value': 2
     },
     'combo_5': {
         'num_cows': 1,
         'num_bulls': 1,
-        'combo_value': 11
+        'combo_value': 2
     },
     'combo_6': {
         'num_cows': 3,
@@ -47,17 +47,17 @@ combos = {
     'combo_7': {
         'num_cows': 0,
         'num_bulls': 3,
-        'combo_value': 30
+        'combo_value': 3
     },
     'combo_8': {
         'num_cows': 2,
         'num_bulls': 1,
-        'combo_value': 12
+        'combo_value': 3
     },
     'combo_9': {
         'num_cows': 1,
         'num_bulls': 2,
-        'combo_value': 21
+        'combo_value': 3
     }
 }
 
@@ -83,6 +83,14 @@ def prompt_player_number():
 
 def analysed_guess(numbers_available, numbers_definite):
     guess = []
+    for key in guesses.keys():
+        if guesses[key]['score'] > 2:
+            g = 1
+    print("This was a good choice")
+            
+
+    # This is if we have found all the numbers
+
     if numbers_definite:
         for digit in range(4):
             digit = random.choice(numbers_definite)
@@ -95,6 +103,9 @@ def analysed_guess(numbers_available, numbers_definite):
             guess.append(str(digit))
         return guess
     else:
+
+        # This is if there are numbers not yet used.
+
         if len(used_digits) < 10:
             while len(used_digits) < 10:
                 digit = random.choice(numbers_available)
@@ -115,6 +126,8 @@ def analysed_guess(numbers_available, numbers_definite):
                             break
                     guess.append(str(digit))
         else:
+        # This is if you haven't found definite and you've used all the numbers
+
             for digit in range(4):
                 digit = random.choice(numbers_available)
                 digit = str(digit)
@@ -124,14 +137,16 @@ def analysed_guess(numbers_available, numbers_definite):
                     if digit not in guess:
                         break
                 guess.append(str(digit))
-        printed_guess = display_computer_guess(guess)
-        for key in guesses.keys():
-            print(key, '->', guesses[key]['printed_guess'])
-            if guesses[key]['printed_guess'] == printed_guess:
-                print("this has already been used")
-            else:
-                print("this has not been used")
-        return guess
+    return guess
+
+
+def checking_guess_is_unique(guess, printed_guesss):
+    for key in guesses.keys():
+        if guesses[key]['printed_guess'] == printed_guess:
+            unique_guess = True
+        else:
+            unique_guess = False
+    return unique_guess
 
 
 def prompt_player_cows_and_bulls_info():
@@ -145,8 +160,8 @@ def prompt_player_cows_and_bulls_info():
 def guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available):
     number_of_cows = int(number_of_cows)
     number_of_bulls = int(number_of_bulls)
-    score = (number_of_cows * 1) + (number_of_bulls * 10)
-    if score == 40 or score == 31 or score == 22 or score == 13 or score == 4:
+    score = (number_of_cows * 1) + (number_of_bulls * 1)
+    if score == 4:
         for i in range(4):
             numbers_available = []
             numbers_definite.append(int(guess[i]))
@@ -167,7 +182,6 @@ def guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, nu
     matched_combo = '-'
     for key in combos.keys():
         if combos[key]['combo_value'] == score:
-            print(key)
             matched_combo = key
     printed_guess = display_computer_guess(guess)
     guesses.update({f'guess_{x}': {
@@ -181,7 +195,6 @@ def guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, nu
                         'printed_guess': printed_guess,
                         'combo': matched_combo
                    }})
-    print(guesses)
     return (numbers_available, numbers_not_available)
 
 
@@ -225,9 +238,15 @@ if finished:
 else:
     while finished is False:
         print("Okay, the computer guesses: ")
-        print(numbers_available)
+
         guess = analysed_guess(numbers_available, numbers_definite)
         printed_guess = display_computer_guess(guess)
+        unique_guess = checking_guess_is_unique(guess, printed_guess)
+        while unique_guess:
+            print("redoing guess")
+            unique_guess = checking_guess_is_unique(guess, printed_guess)
+            if unique_guess is False:
+                break
         number_of_cows, number_of_bulls = prompt_player_cows_and_bulls_info()
         display_cow_and_bull_info(number_of_cows, number_of_bulls, printed_guess)
         # guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_not_available)
@@ -236,5 +255,7 @@ else:
         finished = assess_if_answer_is_correct(number_of_bulls)
         if finished:
             break
+      
+
 
 print("The computer guessed correctly!")
