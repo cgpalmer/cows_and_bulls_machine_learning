@@ -12,6 +12,56 @@ numbers_definite = []
 used_digits = []
 x = 1
 
+# Intermediate combos
+combos = {
+    'combo_1': {
+        'num_cows': 1,
+        'num_bulls': 0,
+        'combo_value': 1
+    },
+    'combo_2': {
+        'num_cows': 0,
+        'num_bulls': 1,
+        'combo_value': 10
+    },
+    'combo_3': {
+        'num_cows': 2,
+        'num_bulls': 0,
+        'combo_value': 2
+    },
+    'combo_4': {
+        'num_cows': 0,
+        'num_bulls': 2,
+        'combo_value': 20
+    },
+    'combo_5': {
+        'num_cows': 1,
+        'num_bulls': 1,
+        'combo_value': 11
+    },
+    'combo_6': {
+        'num_cows': 3,
+        'num_bulls': 0,
+        'combo_value': 3
+    },
+    'combo_7': {
+        'num_cows': 0,
+        'num_bulls': 3,
+        'combo_value': 30
+    },
+    'combo_8': {
+        'num_cows': 2,
+        'num_bulls': 1,
+        'combo_value': 12
+    },
+    'combo_9': {
+        'num_cows': 1,
+        'num_bulls': 2,
+        'combo_value': 21
+    }
+}
+
+
 def prompt_player_number():
     print("Put in the number for the computer to guess: ")
     number_to_guess = input()
@@ -114,7 +164,11 @@ def guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, nu
         for i in range(0, 10):
             if i not in numbers_not_available:
                 numbers_available.append(i)
-
+    matched_combo = '-'
+    for key in combos.keys():
+        if combos[key]['combo_value'] == score:
+            print(key)
+            matched_combo = key
     printed_guess = display_computer_guess(guess)
     guesses.update({f'guess_{x}': {
                         'first_no': guess[0],
@@ -124,7 +178,8 @@ def guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, nu
                         'cows': number_of_cows,
                         'bulls': number_of_bulls,
                         'score': score,
-                        'printed_guess': printed_guess
+                        'printed_guess': printed_guess,
+                        'combo': matched_combo
                    }})
     print(guesses)
     return (numbers_available, numbers_not_available)
