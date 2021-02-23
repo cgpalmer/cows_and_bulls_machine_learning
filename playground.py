@@ -82,16 +82,18 @@ def prompt_player_number():
 
 
 def analysed_guess(numbers_available, numbers_definite):
-    guess = []
-    for key in guesses.keys():
-        if guesses[key]['score'] > 2:
-            g = 1
-    print("This was a good choice")
-            
+    # available_numbers = available_numbers(numbers_available, numbers_not_available, numbers_definite)
+    # priority_numbers = prioritising_numbers(available_numbers)
+    # guess = generating_guess(priority_numbers)
+    # guess = printed_guess(guess)
+    # guess = check_guess_for_repeat_numbers(guess)
+    # guess = checking_guess_is_unique(guess)
+    return guess
 
-    # This is if we have found all the numbers
 
+def available_numbers(numbers_available, numbers_not_available, numbers_definite):
     if numbers_definite:
+        numbers_available = []
         for digit in range(4):
             digit = random.choice(numbers_definite)
             digit = str(digit)
@@ -100,44 +102,88 @@ def analysed_guess(numbers_available, numbers_definite):
                 digit = str(digit)
                 if digit not in guess:
                     break
-            guess.append(str(digit))
-        return guess
-    else:
+            numbers_available.append(str(digit))
+    return available_numbers
 
-        # This is if there are numbers not yet used.
 
-        if len(used_digits) < 10:
-            while len(used_digits) < 10:
-                digit = random.choice(numbers_available)
-                digit = str(digit)
-                if digit not in used_digits:
-                    used_digits.append(digit)
-                    guess.append(str(digit))
-                if len(guess) > 3 or len(used_digits) == 10:
-                    break
-            if len(guess) < 4:
-                num_need_to_fill_guess = 4 - len(guess)
-                for i in range(num_need_to_fill_guess):
-                    digit = random.choice(numbers_available)
-                    while digit in guess:
-                        digit = random.choice(numbers_available)
-                        digit = str(digit)
-                        if digit not in guess:
-                            break
-                    guess.append(str(digit))
-        else:
-        # This is if you haven't found definite and you've used all the numbers
+def priority_numbers(available_numbers):
+    priority_numbers = available_numbers
+    return priority_numbers
 
-            for digit in range(4):
-                digit = random.choice(numbers_available)
-                digit = str(digit)
-                while digit in guess:
-                    digit = random.choice(numbers_available)
-                    digit = str(digit)
-                    if digit not in guess:
-                        break
-                guess.append(str(digit))
+
+def generating_guess(priority_numbers):
     return guess
+
+
+def printed_guess(guess):
+    return printed_guess
+
+
+def check_guess_for_repeat_numbers(guess):
+    return guess
+
+
+def checking_guess_is_unique(guess):
+    return guess
+
+
+
+    # guess = []
+    # for key in guesses.keys():
+    #     if guesses[key]['score'] > 2:
+    #         g = 1
+    # print("This was a good choice")
+            
+
+    # # This is if we have found all the numbers
+
+    # if numbers_definite:
+    #     for digit in range(4):
+    #         digit = random.choice(numbers_definite)
+    #         digit = str(digit)
+    #         while digit in guess:
+    #             digit = random.choice(numbers_definite)
+    #             digit = str(digit)
+    #             if digit not in guess:
+    #                 break
+    #         guess.append(str(digit))
+    #     return guess
+    # else:
+
+    #     # This is if there are numbers not yet used.
+
+    #     if len(used_digits) < 10:
+    #         while len(used_digits) < 10:
+    #             digit = random.choice(numbers_available)
+    #             digit = str(digit)
+    #             if digit not in used_digits:
+    #                 used_digits.append(digit)
+    #                 guess.append(str(digit))
+    #             if len(guess) > 3 or len(used_digits) == 10:
+    #                 break
+    #         if len(guess) < 4:
+    #             num_need_to_fill_guess = 4 - len(guess)
+    #             for i in range(num_need_to_fill_guess):
+    #                 digit = random.choice(numbers_available)
+    #                 while digit in guess:
+    #                     digit = random.choice(numbers_available)
+    #                     digit = str(digit)
+    #                     if digit not in guess:
+    #                         break
+    #                 guess.append(str(digit))
+    #     else:
+    #     # This is if you haven't found definite and you've used all the numbers
+
+    #         for digit in range(4):
+    #             digit = random.choice(numbers_available)
+    #             digit = str(digit)
+    #             while digit in guess:
+    #                 digit = random.choice(numbers_available)
+    #                 digit = str(digit)
+    #                 if digit not in guess:
+    #                     break
+    #             guess.append(str(digit))
+    # return guess
 
 
 def checking_guess_is_unique(guess, printed_guesss):
