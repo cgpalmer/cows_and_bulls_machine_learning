@@ -80,14 +80,13 @@ def prompt_player_number():
     print("Your number is valid: " + str(number_to_guess))
 
 
-
 def analysed_guess(numbers_available, numbers_definite):
-    # available_numbers = available_numbers(numbers_available, numbers_not_available, numbers_definite)
-    # priority_numbers = prioritising_numbers(available_numbers)
-    # guess = generating_guess(priority_numbers)
-    # guess = printed_guess(guess)
-    # guess = check_guess_for_repeat_numbers(guess)
-    # guess = checking_guess_is_unique(guess)
+    available_numbers = available_numbers(numbers_available, numbers_not_available, numbers_definite)
+    priority_numbers = priority_numbers(available_numbers)
+    guess = generating_guess(priority_numbers)
+    guess = check_guess_for_repeat_numbers(guess, priority_numbers)
+    guess = printed_guess(guess)
+    guess = checking_guess_is_unique(guess)
     return guess
 
 
@@ -112,22 +111,31 @@ def priority_numbers(available_numbers):
 
 
 def generating_guess(priority_numbers):
-    
+    guess = []
+    for digit in range(4):
+        digit = random.choice(priority_numbers)
+        digit = str(digit)
+    guess.append(digit)
+    return guess
+
+
+def check_guess_for_repeat_numbers(guess, priority_numbers):
+    # check_guess = set(guess)
+    # if len(check_guess) == 4:
+    #     print("it is long enough")
+    # # while digit in guess:
+    # #     generating_guess(priority_numbers)
     return guess
 
 
 def printed_guess(guess):
+    printed_guess = int(guess[0]+guess[1]+guess[2]+guess[3])
+    print(printed_guess)
     return printed_guess
-
-
-def check_guess_for_repeat_numbers(guess):
-    return guess
 
 
 def checking_guess_is_unique(guess):
     return guess
-
-
 
     # guess = []
     # for key in guesses.keys():
@@ -187,13 +195,13 @@ def checking_guess_is_unique(guess):
     # return guess
 
 
-def checking_guess_is_unique(guess, printed_guesss):
-    for key in guesses.keys():
-        if guesses[key]['printed_guess'] == printed_guess:
-            unique_guess = True
-        else:
-            unique_guess = False
-    return unique_guess
+# def checking_guess_is_unique(guess, printed_guesss):
+#     for key in guesses.keys():
+#         if guesses[key]['printed_guess'] == printed_guess:
+#             unique_guess = True
+#         else:
+#             unique_guess = False
+#     return unique_guess
 
 
 def prompt_player_cows_and_bulls_info():
