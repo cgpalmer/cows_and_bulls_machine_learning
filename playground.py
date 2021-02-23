@@ -112,6 +112,7 @@ def priority_numbers(available_numbers):
 
 
 def generating_guess(priority_numbers):
+    
     return guess
 
 
