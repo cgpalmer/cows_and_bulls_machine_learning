@@ -78,10 +78,6 @@ def prompt_player_cows_and_bulls_info():
     number_of_bulls = input()
     return (number_of_cows, number_of_bulls)
 
-
-def display_cow_and_bull_info(number_of_cows, number_of_bulls, guess):
-    print(f"There are {number_of_cows} cows and {number_of_bulls} bulls in {guess}")
-
 # Code to choose a guess
 
 
@@ -127,10 +123,8 @@ def printed_guess(guess):
 def checking_guess_is_unique(guess):
     if guesses:
         for prev_guess in guesses:
-            unique_val = prev_guess['printed_guess']
-            print("repeats")
-            if guess == unique_val:
-                guess = 'repeats'
+            unique_val = prev_guess['guess']
+            print(unique_val)
     else:
         print("This is the first guess so obvs unique")
     return guess
@@ -145,16 +139,8 @@ def analysed_guess():
         guess = check_guess_for_repeat_numbers(guess)
         if guess != 'repeats':
             break
-
     guess = printed_guess(guess)
-    print(guess)
     guess = checking_guess_is_unique(guess)
-    while guess == 'repeats':
-        guess = generating_guess(priority_numbers)
-        guess = printed_guess(guess)
-        guess = checking_guess_is_unique(guess)
-        if guess != 'repeats':
-            break
     print(guess)
     return guess
 
@@ -162,6 +148,29 @@ def analysed_guess():
 # End of guess code --------------------------------------------------------------------------
 
 # Code to analyse the result from the guess
+
+def process_cows_bulls_score(guess, number_of_cows, number_of_bulls):
+    return score
+
+
+def process_number_position(guess):
+    return first_position, second_position, third_position, fourth_position
+
+
+def create_new_numbers_lists(guess, numbers_available, numbers_definite, numbers_not_available, first_position, second_position, third_position, fourth_position):
+    return numbers_available, numbers_definite, numbers_not_available
+
+
+def store_guess_info(guess, score, numbers_available, numbers_definite, numbers_not_available, first_position, second_position, third_position, fourth_position):
+    return guess
+
+
+def guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_definite, numbers_not_available):
+    score = process_cows_bulls_score(guess, number_of_cows, number_of_bulls)
+    first_position, second_position, third_position, fourth_position = process_number_position(guess)
+    numbers_available, numbers_definite, numbers_not_available = create_new_numbers_lists(guess, numbers_available, numbers_definite, numbers_not_available, first_position, second_position, third_position, fourth_position)
+    store_guess_info(guess, score, numbers_available, numbers_definite, numbers_not_available, first_position, second_position, third_position, fourth_position)
+
 
 
 # End of analysis code -----------------------------------------------------------------------
@@ -173,9 +182,10 @@ print("Computer's first guess")
 available_numbers = available_numbers(numbers_available, numbers_not_available, numbers_definite)
 print(available_numbers)
 priority_numbers = priority_numbers(available_numbers)
-guess = analysed_guess()
-number_of_cows, number_of_bulls = prompt_player_cows_and_bulls_info()
-display_cow_and_bull_info(number_of_cows, number_of_bulls, guess)
+number_of_cows, number_of_bulls = prompt_player_cows_and_bulls_info(guess)
+guess_analysis(guess, number_of_cows, number_of_bulls, numbers_available, numbers_definite, numbers_not_available)
+
+
 
 # End of script
 
